@@ -10,17 +10,30 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     
-    <!-- Skrypt odbierający przekierowanie z 404.html -->
     <script type="text/javascript">
-      (function(l ) {
-        if (l.search.indexOf('p=/') !== -1) {
-          var path = l.search.slice(1).split('&').filter(function(s) { return s.startsWith('p=/') })[0].replace('p=/', '');
-          var query = l.search.slice(1).split('&').filter(function(s) { return !s.startsWith('p=/') }).join('&');
-          window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + path + (query ? '?' + query : '') + l.hash
-          );
+      // SKRYPT NAPRAWCZY DLA WOUTER + GITHUB PAGES
+      (function( ) {
+        var base = '/stronalekarztestowa';
+        // Jeśli jesteśmy na roocie domeny, przekieruj do podfolderu
+        if (window.location.pathname === '/' || window.location.pathname === '') {
+          window.location.replace(base + '/');
         }
-      }(window.location));
+        // Nadpisujemy history.pushState, aby zawsze dodawało prefiks projektu
+        var originalPushState = history.pushState;
+        history.pushState = function(state, title, url) {
+          if (url && !url.startsWith(base) && url.startsWith('/')) {
+            url = base + url;
+          }
+          return originalPushState.apply(history, [state, title, url]);
+        };
+        var originalReplaceState = history.replaceState;
+        history.replaceState = function(state, title, url) {
+          if (url && !url.startsWith(base) && url.startsWith('/')) {
+            url = base + url;
+          }
+          return originalReplaceState.apply(history, [state, title, url]);
+        };
+      })();
     </script>
 
     <script type="module" crossorigin src="assets/index-C2peF96H.js"></script>
