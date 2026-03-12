@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Gabinet Lekarski - Nowoczesna Opieka Medyczna</title>
-    <meta name="description" content="Prywatny gabinet lekarski oferujący nowoczesną opiekę medyczną. Konsultacje, badania, diagnostyka." />
+    <meta name="description" content="Prywatny gabinet lekarski oferujący nowoczesną opiekę medyczną." />
     <meta name="theme-color" content="#0066CC" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,12 +13,11 @@
     <!-- Skrypt odbierający przekierowanie z 404.html -->
     <script type="text/javascript">
       (function(l ) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
+        if (l.search.indexOf('p=/') !== -1) {
+          var path = l.search.slice(1).split('&').filter(function(s) { return s.startsWith('p=/') })[0].replace('p=/', '');
+          var query = l.search.slice(1).split('&').filter(function(s) { return !s.startsWith('p=/') }).join('&');
           window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
+            l.pathname.slice(0, -1) + path + (query ? '?' + query : '') + l.hash
           );
         }
       }(window.location));
